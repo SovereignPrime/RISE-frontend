@@ -3,6 +3,7 @@
 
 from gi.repository import Gtk as gtk, Gdk as gdk, GLib
 from gi.repository.WebKit import WebView
+import os, time
 
 GLib.threads_init()
 
@@ -13,7 +14,7 @@ class browser(WebView):
         viewMF = self.get_main_frame()
         sw = gtk.ScrolledWindow()
         sw.add(self)
-        self.win = gtk.Window()
+        self.win = gtk.Window(title="RISE")
         self.win.connect('destroy', quit)
         self.connect('download-requested', self._download_destination_cb)
         self.win.set_default_size(600, 400)
@@ -34,5 +35,9 @@ class browser(WebView):
         fc.destroy()
         return True
 
-browser('http://localhost:8000')
-gtk.main()
+if __name__ == '__main__':
+    while 'RISE_HTTP_PORT' in os.environ:
+        time.sleep(1)
+    port = os.environ['RISE_HTTP_PORT']
+    browser('http://localhost:%s' % port)
+    gtk.main()
