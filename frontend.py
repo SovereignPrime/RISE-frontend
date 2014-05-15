@@ -3,7 +3,7 @@
 
 from gi.repository import Gtk as gtk, Gdk as gdk, GLib
 from gi.repository.WebKit import WebView
-import os, time
+import os, time, sys
 
 GLib.threads_init()
 
@@ -15,7 +15,7 @@ class browser(WebView):
         sw = gtk.ScrolledWindow()
         sw.add(self)
         self.win = gtk.Window(title="RISE")
-        self.win.connect('destroy', self.quit)
+        self.win.connect('delete-event', self.quit)
         self.connect('download-requested', self._download_destination_cb)
         self.win.set_default_size(600, 400)
         self.win.add(sw)
@@ -41,16 +41,15 @@ class browser(WebView):
         fc.destroy()
         return True
 
-    def quit(self):
+    def quit(self, _v, _w):
         """docstring for quit"""
+        service = os.path.abspath(os.path.dirname(sys.argv[0]))
+        os.system(service + '/rise_service stop')
         gtk.main_quit()
-        os.system('./rise_service stop')
 
 if __name__ == '__main__':
-    os.system('./rise_service start')
     while 'RISE_HTTP_PORT' not in os.environ:
         time.sleep(1)
     port = os.environ['RISE_HTTP_PORT']
-    print port
     browser('http://localhost:%s' % port)
     gtk.main()
