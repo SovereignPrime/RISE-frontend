@@ -48,7 +48,7 @@ class browser(WebView):
 
 if __name__ == '__main__':
     os.system('./rise_service start')
-    while 'RISE_HTTP_PORT' in os.environ:
+    while 'RISE_HTTP_PORT' not in os.environ:
         time.sleep(1)
     port = os.environ['RISE_HTTP_PORT']
     print port
