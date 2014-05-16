@@ -3,13 +3,14 @@
 
 from gi.repository import Gtk as gtk, Gdk as gdk, GLib
 from gi.repository.WebKit import WebView
+from subprocess import Popen
 import os, time, sys
 
 GLib.threads_init()
 
 
-class browser(WebView):
-    def __init__(self, uri):
+class browser(WebView):  # {{{1
+    def __init__(self, uri):  # {{{2
         WebView.__init__(self)
         viewMF = self.get_main_frame()
         sw = gtk.ScrolledWindow()
@@ -20,9 +21,13 @@ class browser(WebView):
         self.win.set_default_size(600, 400)
         self.win.add(sw)
         self.win.show_all()
+        self.backend = Popen(['start.cmd'])
+        tmp = os.environ['TMP']
+        while not os.path.isfile("%s\\rise.port" % tmp):
+            time.sleep(1)
         viewMF.load_uri(uri)
 
-    def _download_destination_cb(self, view, download):
+    def _download_destination_cb(self, view, download):  # {{{2
         """docstring for _download_destination_cb"""
         fc = gtk.FileChooserDialog(title="Save file as...",
                                    parent=None,
@@ -41,15 +46,11 @@ class browser(WebView):
         fc.destroy()
         return True
 
-    def quit(self, _v, _w):
+    def quit(self, _v, _w):  # {{{2
         """docstring for quit"""
-        service = os.path.abspath(os.path.dirname(sys.argv[0]))
-        os.system(service + '/rise_service stop')
+        self.backend.terminate()
         gtk.main_quit()
 
-if __name__ == '__main__':
-    while 'RISE_HTTP_PORT' not in os.environ:
-        time.sleep(1)
-    port = os.environ['RISE_HTTP_PORT']
+if __name__ == '__main__':  # {{{2
     browser('http://localhost:%s' % port)
     gtk.main()
