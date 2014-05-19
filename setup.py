@@ -99,8 +99,8 @@ setup(name='RISE',
                 ),
       options={
           'py2exe': {
-              'packages': ['gi'],
-              'includes': ['gi'],
+              'packages': ['gi', 'gnome'],
+              'includes': ['gi', 'gnome'],
               'dll_excludes': missing_dll
           }
       })
