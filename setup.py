@@ -36,8 +36,8 @@ setup(name='RISE',
       windows=['frontend.py'],
       options={
           'py2exe': {
-              'packages': ['gi', 'gnome'],
-              'includes': ['gi', 'gnome'],
+              'packages': ['gi'],
+              'includes': ['gi'],
               'dll_excludes': missing_dll
           }
       })

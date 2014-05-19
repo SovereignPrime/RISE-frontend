@@ -21,7 +21,8 @@ class browser(WebView):  # {{{1
         self.win.set_default_size(600, 400)
         self.win.add(sw)
         self.win.show_all()
-        self.backend = Popen(['start.cmd'])
+        path = os.path.abspath(os.path.dirname(sys.argv[0]))
+        self.backend = Popen([path + '../start.cmd'])
         tmp = os.environ['TMP']
         pfile = "%s\\rise.port" % tmp
         while not os.path.isfile(pfile):
