@@ -23,9 +23,11 @@ class browser(WebView):  # {{{1
         self.win.show_all()
         self.backend = Popen(['start.cmd'])
         tmp = os.environ['TMP']
-        while not os.path.isfile("%s\\rise.port" % tmp):
+        pfile = "%s\\rise.port" % tmp
+        while not os.path.isfile(pfile):
             time.sleep(1)
-        viewMF.load_uri(uri)
+        port = open(pfile, 'r').read()
+        viewMF.load_uri(uri % port)
 
     def _download_destination_cb(self, view, download):  # {{{2
         """docstring for _download_destination_cb"""
@@ -52,5 +54,5 @@ class browser(WebView):  # {{{1
         gtk.main_quit()
 
 if __name__ == '__main__':  # {{{2
-    browser('http://localhost:%s' % port)
+    browser(r'http://localhost:%s')
     gtk.main()
