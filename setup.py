@@ -18,7 +18,7 @@ setup(name='RISE',
 
       options={
           'py2exe': {
-              'packages': ['encodings'],
-              'includes': ['gobject', 'webkit']
+              'packages': ['gi'],
+              'includes': ['gi']
           }
       })
