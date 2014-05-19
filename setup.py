@@ -33,7 +33,7 @@ setup(name='RISE',
       description='Secure sharing and collaboration',
       version='0.0.30',
 
-      console=['frontend.py'],
+      windows=['frontend.py'],
 
       options={
           'py2exe': {
