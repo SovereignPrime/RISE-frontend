@@ -25,7 +25,8 @@ missing_dll = ['libgtk-3-0.dll',
                'libwebkitgtk-3.0-0.dll',
                'libgirepository-1.0-1.dll',
                'libglib-2.0-0.dll',
-               'libffi-6.dll'
+               'libffi-6.dll',
+               'libgobject-2.0-0.dll'
                ]
 
 setup(name='RISE',
