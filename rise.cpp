@@ -13,7 +13,7 @@ RISE::RISE()
     backend.start("../start.cmd");
     QString tmpdir = qgetenv("TMP");
 #else
-    backend.start("/opt/rise/bin/rise_service", QStringList() << "start");
+    backend.start("./rise_service", QStringList() << "start");
     backend.waitForFinished();
     QString tmpdir = "/tmp";
 #endif
@@ -34,7 +34,7 @@ RISE::RISE()
 RISE::~RISE()
 {
 #ifndef Q_WS_WIN
-    backend.start("/opt/rise/bin/rise_service", QStringList() << "stop");
+    backend.start("./rise_service", QStringList() << "stop");
     //backend.waitForFinished();
 #endif
 }
