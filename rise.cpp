@@ -7,10 +7,36 @@
 
 RISE::RISE()
 {
+
+
+#ifdef Q_WS_WIN
+    backend.start("../start.cmd");
+    QString tmpdir = qgetenv("TMP");
+#else
+    backend.start("/opt/rise/bin/rise_service", QStringList() << "start");
+    backend.waitForFinished();
+    QString tmpdir = "/tmp";
+#endif
+    QFile file(tmpdir.append("/rise.port"));
+    while (!file.exists());
+
+    if(file.open(QFile::ReadOnly))
+        port = file.readLine();
+    else
+        return;
     pWebView = webView();
     pWebPage = pWebView->page();
     pWebPage->setForwardUnsupportedContent(true);
     createActions();
+    loadUrl(QUrl(port.prepend("http://localhost:")));
+}
+
+RISE::~RISE()
+{
+#ifndef Q_WS_WIN
+    backend.start("/opt/rise/bin/rise_service", QStringList() << "stop");
+    //backend.waitForFinished();
+#endif
 }
 
 void RISE::createActions()

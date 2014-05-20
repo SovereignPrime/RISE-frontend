@@ -5,6 +5,7 @@
 #include <QWebPage>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QProcess>
 #include "html5applicationviewer.h"
 
 class RISE : public Html5ApplicationViewer
@@ -13,6 +14,7 @@ class RISE : public Html5ApplicationViewer
 
 public:
     RISE();
+    ~RISE();
 
 private slots:
     void downloadRequested(const QNetworkRequest &);
@@ -24,6 +26,9 @@ private:
 
     QGraphicsWebView *pWebView;
     QWebPage *pWebPage;
+
+    QProcess backend;
+    QString port;
 
 };
 
