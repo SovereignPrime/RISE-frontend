@@ -9,6 +9,7 @@ greaterThan(QT_MAJOR_VERSION, 4):QT += widgets webkitwidgets
 SOURCES += main.cpp \
     rise.cpp
 
+TARGET = rise
 # Please do not modify the following two lines. Required for deployment.
 include(html5applicationviewer/html5applicationviewer.pri)
 qtcAddDeployment()
