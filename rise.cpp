@@ -49,9 +49,9 @@ void RISE::downloadRequested(const QNetworkRequest &request)
             networkManager->get(newRequest);
    /* connect(
                 reply, SIGNAL(downloadProgress(qint64, qint64)),
-                this, SLOT(downloadProgress(qint64, qint64)));
+                this, SLOT(downloadProgress(qint64, qint64)));*/
     connect(reply, SIGNAL(finished()),
-            this, SLOT(downloadIssueFinished()));*/
+            this, SLOT(downloaded()));
 }
 
 void RISE::unsupportedContent(QNetworkReply *reply)
