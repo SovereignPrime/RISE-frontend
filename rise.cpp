@@ -7,13 +7,13 @@
 
 RISE::RISE(QString *p)
 {
-    path = *p;
+    path = p->append("/rise_service");
     qDebug() << path;
 #ifdef Q_WS_WIN
     backend.start("../start.cmd");
     QString tmpdir = qgetenv("TMP");
 #else
-    backend.start(path.append("/rise_service"), QStringList() << "start");
+    backend.start(path, QStringList() << "start");
     backend.waitForFinished();
     QString tmpdir = "/tmp";
 #endif
@@ -36,7 +36,8 @@ RISE::RISE(QString *p)
 RISE::~RISE()
 {
 #ifndef Q_WS_WIN
-    backend.start(path.append("/rise_service"), QStringList() << "stop");
+    backend.close();
+    backend.start(path, QStringList() << "stop");
     //backend.waitForFinished();
 #endif
 }
