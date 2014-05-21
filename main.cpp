@@ -6,9 +6,8 @@
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-
-
-    RISE rise;
+    QString path = app.applicationDirPath();
+    RISE rise(&path);
     rise.show();
     return app.exec();
 }

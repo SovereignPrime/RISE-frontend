@@ -13,7 +13,7 @@ class RISE : public Html5ApplicationViewer
     Q_OBJECT
 
 public:
-    RISE();
+    RISE(QString *p);
     ~RISE();
 
 private slots:
@@ -29,6 +29,7 @@ private:
 
     QProcess backend;
     QString port;
+    QString path;
 
 };
 
