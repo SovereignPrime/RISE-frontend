@@ -9,8 +9,10 @@ RISE::RISE(QString *p)
 {
 #ifdef Q_WS_WIN
     path = p->append("\\start.cmd");
+    QDebug() << path <<"\n";
     backend.start(path);
     QString tmpdir = qgetenv("TMP");
+    QDebug() << tmpdir << "\n";
 #else
     path = p->append("/rise_service");
     backend.start(path, QStringList() << "start");
