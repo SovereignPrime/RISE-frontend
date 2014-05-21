@@ -8,6 +8,7 @@
 RISE::RISE(QString *p)
 {
     path = *p;
+    qDebug() << path;
 #ifdef Q_WS_WIN
     backend.start("../start.cmd");
     QString tmpdir = qgetenv("TMP");
