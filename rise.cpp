@@ -7,12 +7,30 @@
 
 RISE::RISE(QString *p)
 {
-#ifdef Q_WS_WIN
-    path = p->append("\\start.cmd");
-    QDebug() << path <<"\n";
-    backend.start(path);
+#ifdef Q_OS_WIN32
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    QDir pt(*p);
+    pt.cdUp();
+    backend.setWorkingDirectory(pt.path());
+    env.insert("ROOTDIR", ".");
+    env.insert("DOC_ROOT", "./site/static");
+    env.insert("MNESIA_DIR", env.value("APPDATA") + "\\RISE\\data");
+    pt.mkpath(env.value("MNESIA_DIR"));
+    backend.setProcessEnvironment(env);
+    path = *p;
+    qDebug() << path <<"\n";
+    QStringList args;
+    args << "-pa" << "./site/include" << "./site/ebin" <<
+            "-boot" << "./releases/v0.0.30/rise" <<
+            "-embded" << "-sname" << "rise" <<
+            "-config" << "./etc/app.generated.config" <<
+            "-args_file" << "./etc/vm.args" <<
+            "-mnesia dir" << "'\"" + env.value("MNESIA_DIR") + "\"'";
+    qDebug() << backend.workingDirectory() << "\n";
+    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
     QString tmpdir = qgetenv("TMP");
-    QDebug() << tmpdir << "\n";
+    qDebug() << backend.state() << "\n";
+    qDebug() << tmpdir << "\n";
 #else
     path = p->append("/rise_service");
     backend.start(path, QStringList() << "start");
@@ -27,6 +45,8 @@ RISE::RISE(QString *p)
         port = file.readLine();
     else
         return;
+    file.close();
+    file.remove();
     pWebView = webView();
     pWebPage = pWebView->page();
     pWebPage->setForwardUnsupportedContent(true);
@@ -39,7 +59,7 @@ RISE::RISE(QString *p)
 
 RISE::~RISE()
 {
-#ifndef Q_WS_WIN
+#ifndef Q_OS_WIN
     QProcess stop;
     stop.start(path, QStringList() << "stop");
     stop.waitForFinished();
