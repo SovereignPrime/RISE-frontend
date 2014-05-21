@@ -7,16 +7,17 @@
 
 RISE::RISE(QString *p)
 {
-    path = p->append("/rise_service");
-    qDebug() << path;
 #ifdef Q_WS_WIN
-    backend.start("../start.cmd");
+    path = p->append("\\start.cmd");
+    backend.start(path);
     QString tmpdir = qgetenv("TMP");
 #else
+    path = p->append("/rise_service");
     backend.start(path, QStringList() << "start");
     backend.waitForFinished();
     QString tmpdir = "/tmp";
 #endif
+    qDebug() << path;
     QFile file(tmpdir.append("/rise.port"));
     while (!file.exists());
 
@@ -29,6 +30,7 @@ RISE::RISE(QString *p)
     pWebPage->setForwardUnsupportedContent(true);
     createActions();
     QString url = port.prepend("http://localhost:");
+
     loadUrl(QUrl(url));
     show();
 }
