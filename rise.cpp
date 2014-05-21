@@ -36,9 +36,9 @@ RISE::RISE(QString *p)
 RISE::~RISE()
 {
 #ifndef Q_WS_WIN
-    backend.close();
-    backend.start(path, QStringList() << "stop");
-    //backend.waitForFinished();
+    QProcess stop;
+    stop.start(path, QStringList() << "stop");
+    stop.waitForFinished();
 #endif
 }
 
