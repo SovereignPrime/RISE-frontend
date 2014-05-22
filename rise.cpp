@@ -1,6 +1,8 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QVariant>
+#include <QEventLoop>
+#include <QApplication>
 #include "rise.h"
 
 
@@ -39,7 +41,8 @@ RISE::RISE(QString *p)
 #endif
     qDebug() << path;
     QFile file(tmpdir.append("/rise.port"));
-    while (!file.exists());
+    while (!file.exists())
+        QApplication::processEvents(QEventLoop::AllEvents, 100);
 
     if(file.open(QFile::ReadOnly))
         port = file.readLine();
