@@ -20,7 +20,6 @@ RISE::RISE(QString *p)
     pt.mkpath(env.value("MNESIA_DIR"));
     backend.setProcessEnvironment(env);
     path = *p;
-    qDebug() << path <<"\n";
     QStringList args;
     args << "-pa" << "./site/include" << "./site/ebin" <<
             "-boot" << "./releases/v0.0.30/rise" <<
@@ -28,18 +27,14 @@ RISE::RISE(QString *p)
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args" <<
             "-mnesia dir" << "'\"" + env.value("MNESIA_DIR") + "\"'";
-    qDebug() << backend.workingDirectory() << "\n";
     backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
     QString tmpdir = qgetenv("TMP");
-    qDebug() << backend.state() << "\n";
-    qDebug() << tmpdir << "\n";
 #else
     path = p->append("/rise_service");
     backend.start(path, QStringList() << "start");
     backend.waitForFinished();
     QString tmpdir = "/tmp";
 #endif
-    qDebug() << path;
     QFile file(tmpdir.append("/rise.port"));
     while (!file.exists())
         QApplication::processEvents(QEventLoop::AllEvents, 100);
