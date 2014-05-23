@@ -1,4 +1,4 @@
-greaterThan(QT_MAJOR_VERSION, 4):QT += widgets webkitwidgets
+greaterThan(QT_MAJOR_VERSION, 4):QT += widgets webkitwidgets network
 
 # Add more folders to ship with the application, here
 
