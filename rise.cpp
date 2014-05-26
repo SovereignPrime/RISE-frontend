@@ -23,8 +23,7 @@ RISE::RISE(QString *p)
             "-boot" << "./releases/v0.0.30/rise" <<
             "-embded" << "-sname" << "rise" <<
             "-config" << "./etc/app.generated.config" <<
-            "-args_file" << "./etc/vm.args" <<
-            "-mnesia dir" << "'\"" + env.value("MNESIA_DIR") + "\"'";
+            "-args_file" << "./etc/vm.args"
     QString tmpdir = qgetenv("TMP");
 #else
     env.insert("MNESIA_DIR", env.value("HOME") + "/.config/RISE/data");
@@ -38,8 +37,7 @@ RISE::RISE(QString *p)
         "-config" << "./etc/eminer.config" <<
         "-config" << "./etc/etorrent.config" <<
         "-config" << "./etc/sync.config" <<
-        "-args_file" << "./etc/vm.args" <<
-        "-mnesia dir" << "'" + env.value("MNESIA_DIR") + "'";
+        "-args_file" << "./etc/vm.args"
     QString tmpdir = "/tmp";
 #endif
     QFile file(tmpdir.append("/rise.port"));
