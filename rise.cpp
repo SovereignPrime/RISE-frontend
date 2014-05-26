@@ -39,7 +39,7 @@ RISE::RISE(QString *p)
         "-config" << "./etc/etorrent.config" <<
         "-config" << "./etc/sync.config" <<
         "-args_file" << "./etc/vm.args" <<
-        "-mnesia dir" << "'\"" + env.value("MNESIA_DIR") + "\"'";
+        "-mnesia dir" << "'" + env.value("MNESIA_DIR") + "'";
     QString tmpdir = "/tmp";
 #endif
     QFile file(tmpdir.append("/rise.port"));
