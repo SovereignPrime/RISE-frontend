@@ -18,15 +18,13 @@ RISE::RISE(QString *p)
     QStringList args;
 
 #ifdef Q_OS_WIN32
-    env.insert("MNESIA_DIR", env.value("APPDATA") + "\\RISE\\data");
     args << "-pa" << "./site/include" << "./site/ebin" <<
             "-boot" << "./releases/v0.0.30/rise" <<
             "-embded" << "-sname" << "rise" <<
             "-config" << "./etc/app.generated.config" <<
-            "-args_file" << "./etc/vm.args"
+            "-args_file" << "./etc/vm.args";
     QString tmpdir = qgetenv("TMP");
 #else
-    env.insert("MNESIA_DIR", env.value("HOME") + "/.config/RISE/data");
     args << "-pa" << "./site/include" << 
         "-pa" << "./site/ebin" <<
         "-boot" << "./releases/v0.0.30/rise" <<
@@ -37,13 +35,12 @@ RISE::RISE(QString *p)
         "-config" << "./etc/eminer.config" <<
         "-config" << "./etc/etorrent.config" <<
         "-config" << "./etc/sync.config" <<
-        "-args_file" << "./etc/vm.args"
+        "-args_file" << "./etc/vm.args";
     QString tmpdir = "/tmp";
 #endif
     QFile file(tmpdir.append("/rise.port"));
     if (file.exists())
         file.remove();
-    pt.mkpath(env.value("MNESIA_DIR"));
     backend.setProcessEnvironment(env);
     path = *p;
     backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl", args );
