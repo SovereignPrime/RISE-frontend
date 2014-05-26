@@ -9,33 +9,46 @@
 
 RISE::RISE(QString *p)
 {
-#ifdef Q_OS_WIN32
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     QDir pt(*p);
     pt.cdUp();
     backend.setWorkingDirectory(pt.path());
     env.insert("ROOTDIR", ".");
     env.insert("DOC_ROOT", "./site/static");
-    env.insert("MNESIA_DIR", env.value("APPDATA") + "\\RISE\\data");
-    pt.mkpath(env.value("MNESIA_DIR"));
-    backend.setProcessEnvironment(env);
-    path = *p;
     QStringList args;
+
+#ifdef Q_OS_WIN32
+    env.insert("MNESIA_DIR", env.value("APPDATA") + "\\RISE\\data");
     args << "-pa" << "./site/include" << "./site/ebin" <<
             "-boot" << "./releases/v0.0.30/rise" <<
             "-embded" << "-sname" << "rise" <<
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args" <<
             "-mnesia dir" << "'\"" + env.value("MNESIA_DIR") + "\"'";
-    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
     QString tmpdir = qgetenv("TMP");
 #else
-    path = p->append("/rise_service");
-    backend.start(path, QStringList() << "start");
-    backend.waitForFinished();
+    env.insert("MNESIA_DIR", env.value("HOME") + "/.config/RISE/data");
+    args << "-pa" << "./site/include" << 
+        "-pa" << "./site/ebin" <<
+        "-boot" << "./releases/v0.0.30/rise" <<
+        "-embded" << "-sname" << "rise" <<
+        "-config" << "./etc/app.config" <<
+        "-config" << "./etc/bitmessage.config" <<
+        "-config" << "./etc/cowboy.config" <<
+        "-config" << "./etc/eminer.config" <<
+        "-config" << "./etc/etorrent.config" <<
+        "-config" << "./etc/sync.config" <<
+        "-args_file" << "./etc/vm.args" <<
+        "-mnesia dir" << "'\"" + env.value("MNESIA_DIR") + "\"'";
     QString tmpdir = "/tmp";
 #endif
     QFile file(tmpdir.append("/rise.port"));
+    if (file.exists())
+        file.remove();
+    pt.mkpath(env.value("MNESIA_DIR"));
+    backend.setProcessEnvironment(env);
+    path = *p;
+    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl", args );
     while (!file.exists())
         QApplication::processEvents(QEventLoop::AllEvents, 100);
 
