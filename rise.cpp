@@ -16,9 +16,11 @@ RISE::RISE(QString *p)
     env.insert("ROOTDIR", ".");
     env.insert("DOC_ROOT", "./site/static");
     QStringList args;
+    QString vsn = "v";
     QFile vsn_file(pt.path() + "/releases/start_erl.data");
-    if (vsn_file.open(QFile::ReadOnly))
-        QString vsn = vsn_file.readLine().split(' ').last();
+    if (vsn_file.open(QFile::ReadOnly)) {
+        vsn = vsn_file.readLine().split(' ').last().trimmed();
+    }
 
 #ifdef Q_OS_WIN32
     args << "-pa" << "./site/include" << "./site/ebin" <<
