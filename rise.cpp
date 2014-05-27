@@ -19,7 +19,7 @@ RISE::RISE(QString *p)
 
 #ifdef Q_OS_WIN32
     args << "-pa" << "./site/include" << "./site/ebin" <<
-            "-boot" << "./releases/v0.0.30/rise" <<
+            "-boot" << "./releases/v0.1.0/rise" <<
             "-embded" << "-sname" << "rise" <<
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args";
@@ -27,7 +27,7 @@ RISE::RISE(QString *p)
 #else
     args << "-pa" << "./site/include" << 
         "-pa" << "./site/ebin" <<
-        "-boot" << "./releases/v0.0.30/rise" <<
+        "-boot" << "./releases/v0.1.0/rise" <<
         "-embded" << "-sname" << "rise" <<
         "-config" << "./etc/app.config" <<
         "-config" << "./etc/bitmessage.config" <<
