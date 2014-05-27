@@ -29,6 +29,12 @@ RISE::RISE(QString *p)
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args";
     QString tmpdir = qgetenv("TMP");
+    QFile file(tmpdir.append("/rise.port"));
+    if (file.exists())
+        file.remove();
+    backend.setProcessEnvironment(env);
+    path = *p;
+    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
 #else
     args << "-pa" << "./site/include" << 
         "-pa" << "./site/ebin" <<
@@ -42,15 +48,15 @@ RISE::RISE(QString *p)
         "-config" << "./etc/sync.config" <<
         "-args_file" << "./etc/vm.args";
     QString tmpdir = "/tmp";
-#endif
     QFile file(tmpdir.append("/rise.port"));
     if (file.exists())
         file.remove();
     backend.setProcessEnvironment(env);
     path = *p;
     backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl", args );
+#endif
     while (!file.exists())
-        QApplication::processEvents(QEventLoop::AllEvents, 100);
+        QApplication::processEvents(QEventLoop::AllEvents, 1000);
 
     if(file.open(QFile::ReadOnly))
         port = file.readLine();
