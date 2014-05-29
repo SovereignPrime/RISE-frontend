@@ -53,6 +53,7 @@ RISE::RISE(QString *p)
         file.remove();
     backend.setProcessEnvironment(env);
     path = *p;
+    backend.setStandardOutputFile("/tmp/erlstdout.log");
     backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl", args );
 #endif
     backend.waitForStarted(300000);
