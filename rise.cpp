@@ -57,7 +57,8 @@ RISE::RISE(QString *p)
     backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl", args );
 #endif
     backend.waitForStarted(300000);
-    while (!file.exists())
+    backend.waitForReadyRead();
+    /*while (!file.exists())
         QApplication::processEvents(QEventLoop::AllEvents, 1000);
 
     if(file.open(QFile::ReadOnly))
@@ -65,7 +66,7 @@ RISE::RISE(QString *p)
     else
         return;
     file.close();
-    file.remove();
+    file.remove();*/
     pWebView = webView();
     pWebPage = pWebView->page();
     pWebPage->setForwardUnsupportedContent(true);
@@ -84,6 +85,15 @@ RISE::~RISE()
     stop.waitForFinished();
 #endif
 }
+
+void RISE::readyReadStandardOutput()
+{
+    qDebug() << "bytes\n";
+    if (backend.canReadLine()) {
+        QByteArray data = backend.readAllStandardOutput();
+        qDebug() << data << "\n";
+    }
+};
 
 void RISE::createActions()
 {

@@ -20,6 +20,7 @@ private slots:
     void downloadRequested(const QNetworkRequest &);
     void unsupportedContent(QNetworkReply *);
     void downloaded();
+    void readyReadStandardOutput();
 
 private:
     void createActions();
