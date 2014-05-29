@@ -22,16 +22,15 @@ RISE::RISE(QString *p)
     if (vsn_file.open(QFile::ReadOnly)) {
         vsn = vsn_file.readLine().split(' ').last().trimmed();
     }
-
+    path = *p;
+    backend.setProcessEnvironment(env);
 #ifdef Q_OS_WIN32
     args << "-pa" << "./site/include" << "./site/ebin" <<
             "-boot" << "./releases/" + vsn  + "/rise" <<
             "-embded" << "-sname" << "rise" <<
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args";
-    //backend.setProcessEnvironment(env);
-    //path = *p;
-    //backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
+    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
 #else
     args << "-pa" << "./site/include" << 
         "-pa" << "./site/ebin" <<
@@ -44,10 +43,8 @@ RISE::RISE(QString *p)
         "-config" << "./etc/etorrent.config" <<
         "-config" << "./etc/sync.config" <<
         "-args_file" << "./etc/vm.args";
-#endif
-    backend.setProcessEnvironment(env);
-    path = *p;
     backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl", args );
+#endif
     connect(&backend, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     backend.waitForStarted(300000);
     backend.waitForReadyRead();
