@@ -3,6 +3,7 @@
 #include <QVariant>
 #include <QEventLoop>
 #include <QApplication>
+#include <QRegExp>
 #include "rise.h"
 
 
@@ -28,13 +29,9 @@ RISE::RISE(QString *p)
             "-embded" << "-sname" << "rise" <<
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args";
-    QString tmpdir = qgetenv("TMP");
-    QFile file(tmpdir.append("/rise.port"));
-    if (file.exists())
-        file.remove();
-    backend.setProcessEnvironment(env);
-    path = *p;
-    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
+    //backend.setProcessEnvironment(env);
+    //path = *p;
+    //backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
 #else
     args << "-pa" << "./site/include" << 
         "-pa" << "./site/ebin" <<
@@ -47,51 +44,37 @@ RISE::RISE(QString *p)
         "-config" << "./etc/etorrent.config" <<
         "-config" << "./etc/sync.config" <<
         "-args_file" << "./etc/vm.args";
-    QString tmpdir = "/tmp";
-    QFile file(tmpdir.append("/rise.port"));
-    if (file.exists())
-        file.remove();
+#endif
     backend.setProcessEnvironment(env);
     path = *p;
-    backend.setStandardOutputFile("/tmp/erlstdout.log");
     backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl", args );
-#endif
+    connect(&backend, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     backend.waitForStarted(300000);
     backend.waitForReadyRead();
-    /*while (!file.exists())
-        QApplication::processEvents(QEventLoop::AllEvents, 1000);
-
-    if(file.open(QFile::ReadOnly))
-        port = file.readLine();
-    else
-        return;
-    file.close();
-    file.remove();*/
     pWebView = webView();
     pWebPage = pWebView->page();
     pWebPage->setForwardUnsupportedContent(true);
     createActions();
-    QString url = port.prepend("http://localhost:");
 
-    loadUrl(QUrl(url));
     show();
 }
 
 RISE::~RISE()
 {
-#ifndef Q_OS_WIN
-    QProcess stop;
-    stop.start(path, QStringList() << "stop");
-    stop.waitForFinished();
-#endif
+    backend.terminate();
 }
 
 void RISE::readyReadStandardOutput()
 {
-    qDebug() << "bytes\n";
     if (backend.canReadLine()) {
-        QByteArray data = backend.readAllStandardOutput();
-        qDebug() << data << "\n";
+        QByteArray data = backend.readLine();
+        QString str(data);
+        QRegExp cap("^.+0:(\\d+),.*$");
+        if (cap.exactMatch(str)) {
+            port = cap.cap(1);
+            QString url = port.prepend("http://localhost:");
+            loadUrl(QUrl(url));
+        }
     }
 };
 
