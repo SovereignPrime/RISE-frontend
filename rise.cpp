@@ -16,6 +16,7 @@ RISE::RISE(QString *p)
     backend.setWorkingDirectory(pt.path());
     env.insert("ROOTDIR", ".");
     env.insert("DOC_ROOT", "./site/static");
+    qDebug() << env.value("HOME");
     QStringList args;
     QString vsn = "v";
     QFile vsn_file(pt.path() + "/releases/start_erl.data");
@@ -52,7 +53,6 @@ RISE::RISE(QString *p)
     pWebPage = pWebView->page();
     pWebPage->setForwardUnsupportedContent(true);
     createActions();
-
     show();
 }
 
@@ -64,13 +64,17 @@ RISE::~RISE()
 void RISE::readyReadStandardOutput()
 {
     if (backend.canReadLine()) {
+
         QByteArray data = backend.readLine();
         QString str(data);
-        QRegExp cap("^.+0:(\\d+),.*$");
+        qDebug() << str << "\n";
+        QRegExp cap("^.+0.0.0:(\\d+),.*$");
         if (cap.exactMatch(str)) {
             port = cap.cap(1);
+            qDebug() << port << "\n";
             QString url = port.prepend("http://localhost:");
             loadUrl(QUrl(url));
+            showExpanded();
         }
     }
 };
