@@ -55,6 +55,7 @@ RISE::RISE(QString *p)
     path = *p;
     backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl", args );
 #endif
+    backend.waitForStarted(300000);
     while (!file.exists())
         QApplication::processEvents(QEventLoop::AllEvents, 1000);
 
