@@ -34,6 +34,7 @@ private:
     QString port;
     QString path;
 
+
 };
 
 #endif // RISE_H

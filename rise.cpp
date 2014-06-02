@@ -24,6 +24,12 @@ RISE::RISE(QString *p)
     }
     path = *p;
     backend.setProcessEnvironment(env);
+    //QFile clog(env.value("HOME") + "/.config/RISE/log/erlang.log");
+    //if (clog.exists())
+        //clog.remove();
+    //clog.open(QFile::WriteOnly);
+
+
 #ifdef Q_OS_WIN32
     args << "-pa" << "./site/include" << "./site/ebin" <<
             "-boot" << "./releases/" + vsn  + "/rise" <<
@@ -66,6 +72,7 @@ void RISE::readyReadStandardOutput()
 
         QByteArray data = backend.readLine();
         QString str(data);
+        qDebug() << str;
         QRegExp cap("^.+0.0.0:(\\d+),.*$");
         if (cap.exactMatch(str)) {
             port = cap.cap(1);
