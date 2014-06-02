@@ -14,8 +14,8 @@ RISE::RISE(QString *p)
     QDir pt(*p);
     pt.cdUp();
     backend.setWorkingDirectory(pt.path());
-    env.insert("ROOTDIR", pt.path());
-    env.insert("DOC_ROOT", pt.path() + "/site/static");
+    env.insert("ROOTDIR", ".");
+    env.insert("DOC_ROOT", "./site/static");
     QStringList args;
     QString vsn = "v";
     QFile vsn_file(pt.path() + "/releases/start_erl.data");
