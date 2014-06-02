@@ -33,6 +33,7 @@ private:
     QProcess backend;
     QString port;
     QString path;
+    QFile clog;
 
 
 };

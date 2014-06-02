@@ -24,10 +24,11 @@ RISE::RISE(QString *p)
     }
     path = *p;
     backend.setProcessEnvironment(env);
-    //QFile clog(env.value("HOME") + "/.config/RISE/log/erlang.log");
-    //if (clog.exists())
-        //clog.remove();
-    //clog.open(QFile::WriteOnly);
+    clog.setFileName(env.value("HOME") + "/.config/RISE/log/erlang.log");
+    if (clog.exists())
+      clog.remove();
+    clog.open(QFile::WriteOnly);
+
 
 
 #ifdef Q_OS_WIN32
@@ -72,7 +73,7 @@ void RISE::readyReadStandardOutput()
 
         QByteArray data = backend.readLine();
         QString str(data);
-        qDebug() << str;
+        clog.write(data);
         QRegExp cap("^.+0.0.0:(\\d+),.*$");
         if (cap.exactMatch(str)) {
             port = cap.cap(1);
@@ -162,10 +163,10 @@ void RISE::downloaded()
 
 void RISE::error(QNetworkReply::NetworkError code)
 {
-    qDebug() << "Network error: " << code << "\n";
+    //qDebug() << "Network error: " << code << "\n";
 }
 
 void RISE::downloadProgress(qint64 r, qint64 t)
 {
-    qDebug() << "Network error: " << r << ", " << t << "\n";
+    //qDebug() << "Network error: " << r << ", " << t << "\n";
 }
