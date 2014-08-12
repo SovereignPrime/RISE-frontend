@@ -59,6 +59,7 @@ RISE::RISE(QString *p)
     pWebPage = pWebView->page();
     pWebPage->setForwardUnsupportedContent(true);
     createActions();
+    showExpanded();
     show();
 }
 
@@ -79,7 +80,6 @@ void RISE::readyReadStandardOutput()
             port = cap.cap(1);
             QString url = port.prepend("http://localhost:");
             loadUrl(QUrl(url));
-            showExpanded();
         }
     }
 };
