@@ -56,11 +56,12 @@ RISE::RISE(QString *p)
     backend.waitForStarted(300000);
     backend.waitForReadyRead();
     pWebView = webView();
+    pWebView -> setAcceptHoverEvents(true);
     pWebPage = pWebView->page();
     pWebPage->setForwardUnsupportedContent(true);
     createActions();
-    showExpanded();
     show();
+    showExpanded();
 }
 
 RISE::~RISE()
