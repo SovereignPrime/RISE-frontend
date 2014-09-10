@@ -1191,11 +1191,7 @@ void Html5ApplicationViewer::setOrientation(ScreenOrientation orientation)
 
 void Html5ApplicationViewer::showExpanded()
 {
-#if defined(Q_WS_MAEMO_5)
     showMaximized();
-#else
-    show();
-#endif
 }
 
 QGraphicsWebView *Html5ApplicationViewer::webView() const

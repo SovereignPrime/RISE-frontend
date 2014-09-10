@@ -60,7 +60,6 @@ RISE::RISE(QString *p)
     pWebPage = pWebView->page();
     pWebPage->setForwardUnsupportedContent(true);
     createActions();
-    show();
     showExpanded();
 }
 
