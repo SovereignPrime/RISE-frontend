@@ -50,7 +50,7 @@ RISE::RISE(QString *p)
         "-config" << "./etc/etorrent.config" <<
         "-config" << "./etc/sync.config" <<
         "-args_file" << "./etc/vm.args";
-    backend.start(backend.workingDirectory() + "/erts-6.1/bin/erl", args );
+    backend.start(backend.workingDirectory() + "/erts-*/bin/erl", args );
 #endif
     connect(&backend, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     backend.waitForStarted(300000);
