@@ -17,9 +17,10 @@ RISE::RISE(QString *p)
     env.insert("ROOTDIR", ".");
     env.insert("DOC_ROOT", "./site/static");
     QStringList args;
-    QString vsn = "v";
+    QString vsn = "v", erts;
     QFile vsn_file(pt.path() + "/releases/start_erl.data");
     if (vsn_file.open(QFile::ReadOnly)) {
+        erts = vsn_file.readLine().split(' ').first().trimmed();
         vsn = vsn_file.readLine().split(' ').last().trimmed();
     }
     path = *p;
@@ -37,7 +38,7 @@ RISE::RISE(QString *p)
             "-embded" << "-sname" << "rise" <<
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args";
-    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
+    backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl.exe", args );
 #else
     args << "-pa" << "./site/include" << 
         "-pa" << "./site/ebin" <<
@@ -50,7 +51,7 @@ RISE::RISE(QString *p)
         "-config" << "./etc/etorrent.config" <<
         "-config" << "./etc/sync.config" <<
         "-args_file" << "./etc/vm.args";
-    backend.start(backend.workingDirectory() + "/erts-*/bin/erl", args );
+    backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl", args );
 #endif
     connect(&backend, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     backend.waitForStarted(300000);
