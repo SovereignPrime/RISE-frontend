@@ -38,7 +38,7 @@ RISE::RISE(QString *p)
             "-embded" << "-sname" << "rise" <<
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args";
-    backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl.exe", args );
+    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
 #else
     args << "-pa" << "./site/include" << 
         "-pa" << "./site/ebin" <<
