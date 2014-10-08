@@ -25,10 +25,6 @@ RISE::RISE(QString *p)
     }
     path = *p;
     backend.setProcessEnvironment(env);
-    clog.setFileName(env.value("HOME") + "/.config/RISE/log/erlang.log");
-    if (clog.exists())
-      clog.remove();
-    clog.open(QFile::WriteOnly);
 
 
 
@@ -39,7 +35,15 @@ RISE::RISE(QString *p)
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args";
     backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
+    clog.setFileName(env.value("APPDATA") + "/RISE/log/erlang.log");
+    if (clog.exists())
+      clog.remove();
+    clog.open(QFile::WriteOnly);
 #else
+    clog.setFileName(env.value("HOME") + "/.config/RISE/log/erlang.log");
+    if (clog.exists())
+      clog.remove();
+    clog.open(QFile::WriteOnly);
     args << "-pa" << "./site/include" << 
         "-pa" << "./site/ebin" <<
         "-boot" << "./releases/" + vsn + "/rise" <<
