@@ -20,8 +20,9 @@ RISE::RISE(QString *p)
     QString vsn = "v", erts;
     QFile vsn_file(pt.path() + "/releases/start_erl.data");
     if (vsn_file.open(QFile::ReadOnly)) {
-        erts = vsn_file.readLine().split(' ').first().trimmed();
-        vsn = vsn_file.readLine().split(' ').last().trimmed();
+        QList <QByteArray> vdata = vsn_file.readLine().split(' ');
+        erts = vdata.first().trimmed();
+        vsn = vdata.last().trimmed();
     }
     path = *p;
     backend.setProcessEnvironment(env);
@@ -34,11 +35,11 @@ RISE::RISE(QString *p)
             "-embded" << "-sname" << "rise" <<
             "-config" << "./etc/app.generated.config" <<
             "-args_file" << "./etc/vm.args";
-    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
     clog.setFileName(env.value("APPDATA") + "/RISE/log/erlang.log");
     if (clog.exists())
       clog.remove();
     clog.open(QFile::WriteOnly);
+    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
 #else
     clog.setFileName(env.value("HOME") + "/.config/RISE/log/erlang.log");
     if (clog.exists())
