@@ -6,9 +6,10 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QProcess>
-#include "html5applicationviewer.h"
+#include <QWebView>
+//#include "html5applicationviewer.h"
 
-class RISE : public Html5ApplicationViewer
+class RISE : public QWebView
 {
     Q_OBJECT
 
@@ -26,14 +27,15 @@ private slots:
 
 private:
     void createActions();
+    void dropEvent(QDropEvent*);
 
-    QGraphicsWebView *pWebView;
     QWebPage *pWebPage;
 
     QProcess backend;
     QString port;
     QString path;
     QFile clog;
+    QClipboard *clipboard;
 
 
 };

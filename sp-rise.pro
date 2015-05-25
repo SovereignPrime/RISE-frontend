@@ -12,8 +12,8 @@ SOURCES += main.cpp \
 
 TARGET = rise
 # Please do not modify the following two lines. Required for deployment.
-include(html5applicationviewer/html5applicationviewer.pri)
-qtcAddDeployment()
+#include(html5applicationviewer/html5applicationviewer.pri)
+#qtcAddDeployment()
 
 HEADERS += \
     rise.h

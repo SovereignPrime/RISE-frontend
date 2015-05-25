@@ -4,6 +4,9 @@
 #include <QEventLoop>
 #include <QApplication>
 #include <QRegExp>
+#include <QClipboard>
+#include <QMimeData>
+#include <QWebFrame>
 #include "rise.h"
 
 
@@ -61,12 +64,12 @@ RISE::RISE(QString *p)
     connect(&backend, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
     backend.waitForStarted(300000);
     backend.waitForReadyRead();
-    pWebView = webView();
-    pWebView -> setAcceptHoverEvents(true);
-    pWebPage = pWebView->page();
+    //setAcceptHoverEvents(true);
+    pWebPage = page();
     pWebPage->setForwardUnsupportedContent(true);
+    setAcceptDrops(true);
     createActions();
-    showExpanded();
+    //showMaximized();
 }
 
 RISE::~RISE()
@@ -82,17 +85,17 @@ void RISE::readyReadStandardOutput()
         QString str(data);
         clog.write(data);
         QRegExp cap("^.+0.0.0:(\\d+),.*$");
-        if (cap.exactMatch(str)) {
-            port = cap.cap(1);
+        //if (cap.exactMatch(str)) {
+            port = "8000"; //cap.cap(1);
             QString url = port.prepend("http://localhost:");
-            loadUrl(QUrl(url));
-        }
+            load(QUrl(url));
+        //}
     }
 };
 
 void RISE::createActions()
 {
-    connect(pWebView->page(), SIGNAL(downloadRequested(QNetworkRequest)), this, SLOT(downloadRequested(QNetworkRequest)));
+    connect(page(), SIGNAL(downloadRequested(QNetworkRequest)), this, SLOT(downloadRequested(QNetworkRequest)));
     connect(pWebPage, SIGNAL(unsupportedContent(QNetworkReply*)), this, SLOT(unsupportedContent(QNetworkReply*)));
 }
 
@@ -121,7 +124,7 @@ void RISE::downloadRequested(const QNetworkRequest &request)
     // the file and connect to the progress
     // and finished signals.
     QNetworkAccessManager *networkManager =
-            pWebView->page()->networkAccessManager();
+            page()->networkAccessManager();
     QNetworkReply *reply =
             networkManager->get(newRequest);
    /* connect(
@@ -175,4 +178,20 @@ void RISE::error(QNetworkReply::NetworkError code)
 void RISE::downloadProgress(qint64 r, qint64 t)
 {
     //qDebug() << "Network error: " << r << ", " << t << "\n";
+}
+
+void RISE::dropEvent(QDropEvent* event)
+{
+    const QMimeData* mimeData = event->mimeData();
+    qDebug() << "Drop event: " << mimeData->hasUrls() <<  "\n";
+    if(mimeData->hasUrls()) {
+        QStringList pathList;
+        QList<QUrl> urlList = mimeData->urls();
+        for(int i=0; i<urlList.size();i++){
+            QString filePath = urlList.at(i).toLocalFile();
+            qDebug() << "File: " << filePath << "\n";
+            pWebPage->mainFrame()->evaluateJavaScript("upload('" + filePath + "');");
+        }
+    }
+
 }
