@@ -7,7 +7,6 @@
 #include <QNetworkReply>
 #include <QProcess>
 #include <QWebView>
-//#include "html5applicationviewer.h"
 
 class RISE : public QWebView
 {
@@ -35,7 +34,6 @@ private:
     QString port;
     QString path;
     QFile clog;
-    QClipboard *clipboard;
 
 
 };

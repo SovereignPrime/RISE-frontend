@@ -85,11 +85,11 @@ void RISE::readyReadStandardOutput()
         QString str(data);
         clog.write(data);
         QRegExp cap("^.+0.0.0:(\\d+),.*$");
-        //if (cap.exactMatch(str)) {
-            port = "8000"; //cap.cap(1);
+        if (cap.exactMatch(str)) {
+            port = cap.cap(1);
             QString url = port.prepend("http://localhost:");
             load(QUrl(url));
-        //}
+        }
     }
 };
 
@@ -183,15 +183,14 @@ void RISE::downloadProgress(qint64 r, qint64 t)
 void RISE::dropEvent(QDropEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();
-    qDebug() << "Drop event: " << mimeData->hasUrls() <<  "\n";
+    //qDebug() << "Drop event: " << mimeData->hasUrls() <<  "\n";
     if(mimeData->hasUrls()) {
-        QStringList pathList;
+        QString filePath;
         QList<QUrl> urlList = mimeData->urls();
         for(int i=0; i<urlList.size();i++){
-            QString filePath = urlList.at(i).toLocalFile();
-            qDebug() << "File: " << filePath << "\n";
+            filePath = urlList.at(i).toLocalFile();
+            //qDebug() << "File: " << filePath << "\n";
             pWebPage->mainFrame()->evaluateJavaScript("upload('" + filePath + "');");
         }
     }
-
 }
