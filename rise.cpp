@@ -69,7 +69,7 @@ RISE::RISE(QString *p)
     pWebPage->setForwardUnsupportedContent(true);
     setAcceptDrops(true);
     createActions();
-    //showMaximized();
+    showMaximized();
 }
 
 RISE::~RISE()
@@ -80,7 +80,6 @@ RISE::~RISE()
 void RISE::readyReadStandardOutput()
 {
     while (backend.canReadLine()) {
-
         QByteArray data = backend.readLine();
         QString str(data);
         clog.write(data);
@@ -91,7 +90,7 @@ void RISE::readyReadStandardOutput()
             load(QUrl(url));
         }
     }
-};
+}
 
 void RISE::createActions()
 {
