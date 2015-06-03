@@ -146,7 +146,9 @@ void RISE::unsupportedContent(QNetworkReply *reply)
 
         if (fileName.isEmpty())
             return;
-        if (reply->isFinished()) {
+
+        pWebPage->mainFrame()->evaluateJavaScript("download('" + defaultFileName + "','" + fileName + "');");
+        /*if (reply->isFinished()) {
             QFile file(fileName);
             if(file.open(QFile::ReadWrite))
                 file.write(reply->readAll());
@@ -155,7 +157,7 @@ void RISE::unsupportedContent(QNetworkReply *reply)
             connect(reply, SIGNAL(finished()), this, SLOT(downloaded()));
             connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64, qint64)));
             connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-        }
+        }*/
     }
     return;
 }
