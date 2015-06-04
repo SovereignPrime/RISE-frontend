@@ -126,9 +126,6 @@ void RISE::downloadRequested(const QNetworkRequest &request)
             page()->networkAccessManager();
     QNetworkReply *reply =
             networkManager->get(newRequest);
-   /* connect(
-                reply, SIGNAL(downloadProgress(qint64, qint64)),
-                this, SLOT(downloadProgress(qint64, qint64)));*/
     connect(reply, SIGNAL(finished()),
             this, SLOT(downloaded()));
 }
@@ -147,17 +144,7 @@ void RISE::unsupportedContent(QNetworkReply *reply)
         if (fileName.isEmpty())
             return;
 
-        pWebPage->mainFrame()->evaluateJavaScript("download('" + defaultFileName + "','" + fileName + "');");
-        /*if (reply->isFinished()) {
-            QFile file(fileName);
-            if(file.open(QFile::ReadWrite))
-                file.write(reply->readAll());
-        } else {
-            reply->request().setAttribute(QNetworkRequest::User, fileName);
-            connect(reply, SIGNAL(finished()), this, SLOT(downloaded()));
-            connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(downloadProgress(qint64, qint64)));
-            connect(reply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
-        }*/
+        pWebPage->mainFrame()->evaluateJavaScript("download('" + fileName + "');");
     }
     return;
 }
@@ -169,16 +156,6 @@ void RISE::downloaded()
     QFile file(fileName);
     if(file.open(QFile::ReadWrite))
         file.write(reply->readAll());
-}
-
-void RISE::error(QNetworkReply::NetworkError code)
-{
-    //qDebug() << "Network error: " << code << "\n";
-}
-
-void RISE::downloadProgress(qint64 r, qint64 t)
-{
-    //qDebug() << "Network error: " << r << ", " << t << "\n";
 }
 
 void RISE::dropEvent(QDropEvent* event)

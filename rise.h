@@ -20,8 +20,6 @@ private slots:
     void downloadRequested(const QNetworkRequest &);
     void unsupportedContent(QNetworkReply *);
     void downloaded();
-    void error(QNetworkReply::NetworkError);
-    void downloadProgress(qint64 r, qint64 t);
     void readyReadStandardOutput();
 
 private:
