@@ -56,6 +56,7 @@ RISE::RISE(QString *p)
         "-config" << "./etc/bitmessage.config" <<
         "-config" << "./etc/cowboy.config" <<
         "-config" << "./etc/eminer.config" <<
+        "-config" << "./etc/simple_bridge.config" <<
         "-config" << "./etc/sync.config" <<
         "-args_file" << "./etc/vm.args";
     backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl", args );
