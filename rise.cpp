@@ -57,8 +57,8 @@ RISE::RISE(QString *p)
         "-config" << "./etc/cowboy.config" <<
         "-config" << "./etc/eminer.config" <<
         "-config" << "./etc/simple_bridge.config" <<
-        "-config" << "./etc/sync.config" <<
-        "-args_file" << "./etc/vm.args";
+        "-config" << "./etc/sync.config"; // <<
+        // "-args_file" << "./etc/vm.args";
     backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl", args );
 #endif
     connect(&backend, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
