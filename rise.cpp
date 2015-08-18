@@ -53,12 +53,6 @@ RISE::RISE(QString *p)
         "-pa" << "./lib/*/ebin" <<
         "-boot" << "./releases/" + vsn + "/rise" <<
         "-embded" << "-sname" << "rise" <<
-        //"-config" << "./etc/app.config" <<
-        //"-config" << "./etc/bitmessage.config" <<
-        //"-config" << "./etc/cowboy.config" <<
-        //"-config" << "./etc/eminer.config" <<
-        //"-config" << "./etc/simple_bridge.config" <<
-        //"-config" << "./etc/sync.config"; // <<
         "-args_file" << "./etc/vm.args";
     qDebug() << "Args: " << args;
     backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl", args );
@@ -86,7 +80,7 @@ void RISE::readyReadStandardOutput()
         QString str(data);
         clog.write(data);
         qDebug() << "Read: " << str << "\n";
-        QRegExp cap("^.+0.0.0:(\\d+),.*$");
+        QRegExp cap("^.+0.0.0:(\\d+).*$");
         if (cap.exactMatch(str)) {
             port = cap.cap(1);
             QString url = port.prepend("http://localhost:");
