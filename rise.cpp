@@ -33,11 +33,7 @@ RISE::RISE(QString *p)
 
 
 #ifdef Q_OS_WIN32
-    args << "-pa" << "./site/include" << "./site/ebin" <<
-            "-boot" << "./releases/" + vsn  + "/rise" <<
-            "-embded" << "-sname" << "rise" <<
-            "-config" << "./etc/app.generated.config" <<
-            "-args_file" << "./etc/vm.args";
+    args << "-args_file" << "./etc/vm.args";
     clog.setFileName(env.value("APPDATA") + "/RISE/log/erlang.log");
     if (clog.exists())
       clog.remove();
@@ -48,12 +44,7 @@ RISE::RISE(QString *p)
     if (clog.exists())
       clog.remove();
     clog.open(QFile::WriteOnly);
-    args //<< "-pa" << "./site/include" << 
-        //"-pa" << "./site/ebin" <<
-        //"-pa" << "./lib/*/ebin" <<
-        //"-boot" << "./releases/" + vsn + "/rise" <<
-        //"-embded" << "-sname" << "rise" <<
-        << "-args_file" << "./etc/vm.args";
+    args << "-args_file" << "./etc/vm.args";
     qDebug() << "Args: " << args;
     backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl", args );
 #endif
@@ -79,9 +70,9 @@ void RISE::readyReadStandardOutput()
         QByteArray data = backend.readLine();
         QString str(data);
         clog.write(data);
-        qDebug() << "Read: " << str << "\n";
         QRegExp cap("^.+0.0.0:(\\d+).*$");
         if (cap.exactMatch(str)) {
+            qDebug() << "Read: " << str << "\n";
             port = cap.cap(1);
             QString url = port.prepend("http://localhost:");
             load(QUrl(url));
