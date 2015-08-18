@@ -45,7 +45,6 @@ RISE::RISE(QString *p)
       clog.remove();
     clog.open(QFile::WriteOnly);
     args << "-args_file" << "./etc/vm.args";
-    qDebug() << "Args: " << args;
     backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl", args );
 #endif
     connect(&backend, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadStandardOutput()));
@@ -72,7 +71,6 @@ void RISE::readyReadStandardOutput()
         clog.write(data);
         QRegExp cap("^.+0.0.0:(\\d+).*$");
         if (cap.exactMatch(str)) {
-            qDebug() << "Read: " << str << "\n";
             port = cap.cap(1);
             QString url = port.prepend("http://localhost:");
             load(QUrl(url));
