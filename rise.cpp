@@ -85,6 +85,7 @@ void RISE::readyReadStandardOutput()
         QByteArray data = backend.readLine();
         QString str(data);
         clog.write(data);
+        qDebug() << "Read: " << str << "\n";
         QRegExp cap("^.+0.0.0:(\\d+),.*$");
         if (cap.exactMatch(str)) {
             port = cap.cap(1);
