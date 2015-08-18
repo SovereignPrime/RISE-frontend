@@ -50,15 +50,16 @@ RISE::RISE(QString *p)
     clog.open(QFile::WriteOnly);
     args << "-pa" << "./site/include" << 
         "-pa" << "./site/ebin" <<
+        "-pa" << "./lib/*/ebin" <<
         "-boot" << "./releases/" + vsn + "/rise" <<
         "-embded" << "-sname" << "rise" <<
-        "-config" << "./etc/app.config" <<
-        "-config" << "./etc/bitmessage.config" <<
-        "-config" << "./etc/cowboy.config" <<
-        "-config" << "./etc/eminer.config" <<
-        "-config" << "./etc/simple_bridge.config" <<
-        "-config" << "./etc/sync.config"; // <<
-        // "-args_file" << "./etc/vm.args";
+        //"-config" << "./etc/app.config" <<
+        //"-config" << "./etc/bitmessage.config" <<
+        //"-config" << "./etc/cowboy.config" <<
+        //"-config" << "./etc/eminer.config" <<
+        //"-config" << "./etc/simple_bridge.config" <<
+        //"-config" << "./etc/sync.config"; // <<
+        "-args_file" << "./etc/vm.args";
     qDebug() << "Args: " << args;
     backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl", args );
 #endif
