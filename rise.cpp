@@ -48,12 +48,12 @@ RISE::RISE(QString *p)
     if (clog.exists())
       clog.remove();
     clog.open(QFile::WriteOnly);
-    args << "-pa" << "./site/include" << 
-        "-pa" << "./site/ebin" <<
-        "-pa" << "./lib/*/ebin" <<
-        "-boot" << "./releases/" + vsn + "/rise" <<
-        "-embded" << "-sname" << "rise" <<
-        "-args_file" << "./etc/vm.args";
+    args //<< "-pa" << "./site/include" << 
+        //"-pa" << "./site/ebin" <<
+        //"-pa" << "./lib/*/ebin" <<
+        //"-boot" << "./releases/" + vsn + "/rise" <<
+        //"-embded" << "-sname" << "rise" <<
+        << "-args_file" << "./etc/vm.args";
     qDebug() << "Args: " << args;
     backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl", args );
 #endif
