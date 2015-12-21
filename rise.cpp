@@ -38,7 +38,7 @@ RISE::RISE(QString *p)
     if (clog.exists())
       clog.remove();
     clog.open(QFile::WriteOnly);
-    backend.start(backend.workingDirectory() + "/erts-6.0/bin/erl.exe", args );
+    backend.start(backend.workingDirectory() + "/erts-" + erts + "/bin/erl.exe", args );
 #else
     clog.setFileName(env.value("HOME") + "/.config/RISE/log/erlang.log");
     if (clog.exists())
